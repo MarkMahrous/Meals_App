@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/widgets/filter_option.dart';
+// import 'package:meals_app/screens/tab_screen.dart';
+// import 'package:meals_app/widgets/drawer.dart';
 
-class FiltersScreen extends StatefulWidget {
+class FiltersScreen extends StatelessWidget {
   const FiltersScreen({super.key});
 
-  @override
-  State<FiltersScreen> createState() => _FiltersScreenState();
-}
+  final _isGlutenFree = false;
 
-class _FiltersScreenState extends State<FiltersScreen> {
-  var _isGlutenFree = false;
+  final _isLactoseFree = false;
+
+  final _isVegetarian = false;
+
+  final _isVegan = false;
 
   @override
   Widget build(BuildContext context) {
@@ -16,29 +20,39 @@ class _FiltersScreenState extends State<FiltersScreen> {
       appBar: AppBar(
         title: const Text('Your Filters'),
       ),
+      // drawer: MainDrawer(
+      //   setScreen: (indentifier) {
+      //     Navigator.of(context).pop();
+      //     if (indentifier == 'Meals') {
+      //       Navigator.of(context).push(
+      //         MaterialPageRoute(
+      //           builder: (ctx) => const TabsScreen(),
+      //         ),
+      //       );
+      //     }
+      //   },
+      // ),
       body: Column(
         children: [
-          SwitchListTile(
+          FilterOption(
             value: _isGlutenFree,
-            onChanged: (isChecked) {
-              setState(() {
-                _isGlutenFree = isChecked;
-              });
-            },
-            title: Text(
-              'Gluten-free',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            subtitle: Text(
-              'Only include gluten-free meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 16, right: 16),
+            title: 'Gluten-free',
+            subtitle: 'Only include gluten-free meals.',
+          ),
+          FilterOption(
+            value: _isLactoseFree,
+            title: 'Lactose-free',
+            subtitle: 'Only include lactose-free meals.',
+          ),
+          FilterOption(
+            value: _isVegetarian,
+            title: 'Vegetarian',
+            subtitle: 'Only include vegetarian meals.',
+          ),
+          FilterOption(
+            value: _isVegan,
+            title: 'Vegan',
+            subtitle: 'Only include vegan meals.',
           ),
         ],
       ),

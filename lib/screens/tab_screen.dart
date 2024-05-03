@@ -51,15 +51,13 @@ class _TabsScreenState extends State<TabsScreen> {
   }
 
   void _setScreen(String indentifier) {
+    Navigator.of(context).pop();
     if (indentifier == 'Filters') {
-      Navigator.of(context).pop();
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (ctx) => const FiltersScreen(),
         ),
       );
-    } else {
-      Navigator.of(context).pop();
     }
   }
 
