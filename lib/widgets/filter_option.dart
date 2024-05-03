@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class FilterOption extends StatefulWidget {
-  FilterOption(
-      {super.key,
-      required this.value,
-      required this.title,
-      required this.subtitle});
+  FilterOption({
+    super.key,
+    required this.value,
+    required this.title,
+    required this.subtitle,
+    required this.onChanged,
+  });
 
   bool value;
   final String title;
   final String subtitle;
+  final void Function(bool) onChanged;
 
   @override
   State<FilterOption> createState() => _FilterOptionState();

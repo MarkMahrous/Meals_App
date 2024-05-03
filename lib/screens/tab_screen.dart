@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/filters_screen.dart';
 import 'package:meals_app/screens/meals_screen.dart';
 import 'package:meals_app/widgets/drawer.dart';
+
+final kInitialFilters = {
+  Filter.glutenFree: false,
+  Filter.lactoseFree: false,
+  Filter.vegan: false,
+  Filter.vegetarian: false,
+};
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -15,6 +23,7 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int currentIndex = 0;
   List<Meal> favoriteMeals = [];
+  Map<Filter, bool> filters = kInitialFilters;
 
   void _selectScreen(index) {
     currentIndex = index;
@@ -50,25 +59,46 @@ class _TabsScreenState extends State<TabsScreen> {
     }
   }
 
-  void _setScreen(String indentifier) {
+  void _setScreen(String indentifier) async {
     Navigator.of(context).pop();
     if (indentifier == 'Filters') {
-      Navigator.of(context).push(
+      final results = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (ctx) => const FiltersScreen(),
+          builder: (ctx) => FiltersScreen(filters: filters),
         ),
       );
+      setState(() {
+        filters = results ?? kInitialFilters;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Meal> availableMeals = dummyMeals.where((meal) {
+      if (filters[Filter.glutenFree]! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (filters[Filter.lactoseFree]! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (filters[Filter.vegan]! && !meal.isVegan) {
+        return false;
+      }
+      if (filters[Filter.vegetarian]! && !meal.isVegetarian) {
+        return false;
+      }
+      return true;
+    }).toList();
+
     Widget activeScreen = currentIndex == 0
         ? CategoriesScreen(
             onToggleFavorite: _toggleMealFavoriteStatus,
+            availableMeals: availableMeals,
           )
         : MealsScreen(
             meals: favoriteMeals, onToggleFavorite: _toggleMealFavoriteStatus);
+
     return Scaffold(
       appBar: AppBar(
         title: currentIndex == 0
