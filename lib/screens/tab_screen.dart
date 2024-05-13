@@ -1,41 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/categories_screen.dart';
 import 'package:meals_app/screens/filters_screen.dart';
 import 'package:meals_app/screens/meals_screen.dart';
 import 'package:meals_app/widgets/drawer.dart';
-import 'package:meals_app/providers/meals_provider.dart';
 import 'package:meals_app/providers/favorites_provider.dart';
 import 'package:meals_app/providers/filters_provider.dart';
 
-// final kInitialFilters = {
-//   Filter.glutenFree: false,
-//   Filter.lactoseFree: false,
-//   Filter.vegan: false,
-//   Filter.vegetarian: false,
-// };
-
-// why I can't just do this?
-
-// List<int> numbers = [1, 2, 3];
-
-// void addNumber(int number) {
-//   numbers.add(number);
-// }
-
-// List<Meal> favoriteMeals = [];
-
-// void toggleMealFavoriteStatus(Meal meal) {
-//   if (favoriteMeals.contains(meal)) {
-//     favoriteMeals.remove(meal);
-//   } else {
-//     favoriteMeals.add(meal);
-//   }
-// }
-
-// if it's stateless widget, we use ConsumerWidget
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
@@ -74,24 +46,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final meals = ref.watch(mealsProvider);
-    final filters = ref.watch(filterProvider);
-    List<Meal> availableMeals = meals.where((meal) {
-      if (filters[Filter.glutenFree]! && !meal.isGlutenFree) {
-        return false;
-      }
-      if (filters[Filter.lactoseFree]! && !meal.isLactoseFree) {
-        return false;
-      }
-      if (filters[Filter.vegan]! && !meal.isVegan) {
-        return false;
-      }
-      if (filters[Filter.vegetarian]! && !meal.isVegetarian) {
-        return false;
-      }
-      return true;
-    }).toList();
-
+    final availableMeals = ref.watch(filteredMealsProvider);
     final favoriteMeals = ref.watch(favoriteMealsProvider);
 
     Widget activeScreen = currentIndex == 0
