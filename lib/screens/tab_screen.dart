@@ -7,14 +7,35 @@ import 'package:meals_app/screens/filters_screen.dart';
 import 'package:meals_app/screens/meals_screen.dart';
 import 'package:meals_app/widgets/drawer.dart';
 import 'package:meals_app/providers/meals_provider.dart';
+import 'package:meals_app/providers/favorites_provider.dart';
+import 'package:meals_app/providers/filters_provider.dart';
 
-final kInitialFilters = {
-  Filter.glutenFree: false,
-  Filter.lactoseFree: false,
-  Filter.vegan: false,
-  Filter.vegetarian: false,
-};
+// final kInitialFilters = {
+//   Filter.glutenFree: false,
+//   Filter.lactoseFree: false,
+//   Filter.vegan: false,
+//   Filter.vegetarian: false,
+// };
 
+// why I can't just do this?
+
+// List<int> numbers = [1, 2, 3];
+
+// void addNumber(int number) {
+//   numbers.add(number);
+// }
+
+// List<Meal> favoriteMeals = [];
+
+// void toggleMealFavoriteStatus(Meal meal) {
+//   if (favoriteMeals.contains(meal)) {
+//     favoriteMeals.remove(meal);
+//   } else {
+//     favoriteMeals.add(meal);
+//   }
+// }
+
+// if it's stateless widget, we use ConsumerWidget
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
@@ -26,8 +47,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int currentIndex = 0;
-  List<Meal> favoriteMeals = [];
-  Map<Filter, bool> filters = kInitialFilters;
 
   void _selectScreen(index) {
     currentIndex = index;
@@ -42,44 +61,21 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     }
   }
 
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-    ));
-  }
-
-  void _toggleMealFavoriteStatus(Meal meal) {
-    if (favoriteMeals.contains(meal)) {
-      setState(() {
-        favoriteMeals.remove(meal);
-        _showMessage("Removed from favorites!");
-      });
-    } else {
-      setState(() {
-        favoriteMeals.add(meal);
-        _showMessage("Added to favorites!");
-      });
-    }
-  }
-
   void _setScreen(String indentifier) async {
     Navigator.of(context).pop();
     if (indentifier == 'Filters') {
-      final results = await Navigator.of(context).push<Map<Filter, bool>>(
+      await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (ctx) => FiltersScreen(filters: filters),
+          builder: (ctx) => const FiltersScreen(),
         ),
       );
-      setState(() {
-        filters = results ?? kInitialFilters;
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealsProvider);
+    final filters = ref.watch(filterProvider);
     List<Meal> availableMeals = meals.where((meal) {
       if (filters[Filter.glutenFree]! && !meal.isGlutenFree) {
         return false;
@@ -96,13 +92,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       return true;
     }).toList();
 
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
+
     Widget activeScreen = currentIndex == 0
         ? CategoriesScreen(
-            onToggleFavorite: _toggleMealFavoriteStatus,
             availableMeals: availableMeals,
           )
-        : MealsScreen(
-            meals: favoriteMeals, onToggleFavorite: _toggleMealFavoriteStatus);
+        : MealsScreen(meals: favoriteMeals);
 
     return Scaffold(
       appBar: AppBar(

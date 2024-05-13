@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
-// import 'package:meals_app/screens/tab_screen.dart';
-// import 'package:meals_app/widgets/drawer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum Filter {
-  glutenFree,
-  lactoseFree,
-  vegan,
-  vegetarian,
-}
+import 'package:meals_app/providers/filters_provider.dart';
 
-class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key, required this.filters});
-
-  final Map<Filter, bool> filters;
+class FiltersScreen extends ConsumerStatefulWidget {
+  const FiltersScreen({super.key});
 
   @override
-  State<FiltersScreen> createState() => _FiltersScreenState();
+  ConsumerState<FiltersScreen> createState() => _FiltersScreenState();
 }
 
-class _FiltersScreenState extends State<FiltersScreen> {
+class _FiltersScreenState extends ConsumerState<FiltersScreen> {
   var _isGlutenFree = false;
   var _isLactoseFree = false;
   var _isVegan = false;
@@ -29,10 +21,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   void initState() {
     super.initState();
-    _isGlutenFree = widget.filters[Filter.glutenFree]!;
-    _isLactoseFree = widget.filters[Filter.lactoseFree]!;
-    _isVegan = widget.filters[Filter.vegan]!;
-    _isVegetarian = widget.filters[Filter.vegetarian]!;
+    final filters = ref.read(filterProvider);
+    _isGlutenFree = filters[Filter.glutenFree]!;
+    _isLactoseFree = filters[Filter.lactoseFree]!;
+    _isVegan = filters[Filter.vegan]!;
+    _isVegetarian = filters[Filter.vegetarian]!;
   }
 
   @override
@@ -55,13 +48,17 @@ class _FiltersScreenState extends State<FiltersScreen> {
       // ),
       body: WillPopScope(
         onWillPop: () async {
-          Navigator.of(context).pop({
+          ref.read(filterProvider.notifier).setFilters({
             Filter.glutenFree: _isGlutenFree,
             Filter.lactoseFree: _isLactoseFree,
             Filter.vegan: _isVegan,
             Filter.vegetarian: _isVegetarian,
           });
-          return false;
+          // We only used this pop before to pass the data back to the previous screen
+          // but now we are using the setFilters method to set the filters
+          // Navigator.of(context).pop();
+          // We have to return true here because we are not using the pop method manually
+          return true;
         },
         child: Column(
           children: [
