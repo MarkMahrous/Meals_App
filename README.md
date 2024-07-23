@@ -20,7 +20,8 @@ A mobile application designed to explore meals from various categories, view ing
 
 ### Technologies
 - [**Flutter**](https://flutter.dev/): A UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase.
-- [**Dart**:](https://dart.dev/) The programming language used by Flutter.
+- [**Dart**](https://dart.dev/): The programming language used by Flutter.
+- [**Visual Studio Code**](https://code.visualstudio.com/): A lightweight and powerful code editor with excellent support for various programming languages.
 
 ### Packages
 - [**google_fonts**](https://pub.dev/packages/google_fonts): A Flutter package to use fonts from [https://fonts.google.com](https://fonts.google.com).
