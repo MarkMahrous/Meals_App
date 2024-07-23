@@ -11,10 +11,10 @@ A mobile application designed to explore meals from various categories, view ing
 
 ## Features
 
-- Discover Meals: Browse and discover meals across different categories.
-- View Meal Details: Access detailed information about meals, including ingredients and step-by-step cooking instructions.
-- Favorites Management: Easily add or remove meals from your favorites list.
-- Meal Filtering: Filter meals based on preferences such as gluten-free, lactose-free, vegetarian, or vegan options.
+- **Discover Meals**: Browse and discover meals across different categories.
+- **View Meal Details**: Access detailed information about meals, including ingredients and step-by-step cooking instructions.
+- **Favorites Management**: Easily add or remove meals from your favorites list.
+- **Meal Filtering**: Filter meals based on preferences such as gluten-free, lactose-free, vegetarian, or vegan options.
 
 ## Technologies and Packages
 
