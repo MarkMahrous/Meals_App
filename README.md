@@ -42,6 +42,7 @@ A mobile application designed to explore meals from various categories, view ing
     flutter run
     ```
 
+
 ## Screenshots
 
 ### Categories and Meals
